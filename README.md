@@ -1,4 +1,5 @@
 # Fake Commit
+[中文](http://floyda.xyz/blog/2016/02/14/fake-commit/)
 > fake a commit to github, if you forgot.
 you could deploy it on server, IDE plugins or system timer.
 So you could be the best committer in the planet.
