@@ -21,7 +21,6 @@ def get_github_time():
 def has_commit_today():
     t = get_github_time()
     for repo in github3.iter_user_repos(Github.user_name):
-        # print repo.updated_at, repo.pushed_at, repo.name
         if t in str(repo.pushed_at):
             return True
     return False
@@ -51,8 +50,8 @@ def fake_commit():
 def main():
     global gh
     gh = github3.login(Github.user_name, password=Github.user_passwd)
-    # if not has_commit_today():
-    if True:  # debug
+    if not has_commit_today():
+    # if True:  # debug
         fake_commit()
 
 
