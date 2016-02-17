@@ -15,8 +15,8 @@ class Github:
 
 
 def get_github_date():
-    us_time = datetime.datetime.fromtimestamp(time.time() - 16 * 3600)
-    # print us_time.date()
+    us_time = datetime.datetime.utcnow()
+    # print us_time
     return str(us_time.date())
 
 
@@ -40,7 +40,7 @@ def get_fake_repo():
 
 def fake_commit():
     repo = get_fake_repo()
-    t = get_github_date() + "-" + str(datetime.datetime.now().time())[:5]
+    t = get_github_date() + "-" + str(datetime.datetime.utcnow().time())[:5]
 
     path = "log/%s" % t
     msg = "hasnt commit at %s" % t
