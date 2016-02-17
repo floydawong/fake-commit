@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import github3
-from datetime import *
+import time
+import datetime
 
 gh = None
 
@@ -10,18 +11,20 @@ gh = None
 class Github:
     user_name = "<user-name>"
     user_passwd = "<password>"
-    fake_repo_name = "fake-commit"
+    fake_repo_name = "fake-commit-log"
 
 
-def get_github_time():
-    utc = datetime.utcnow()
-    return str(utc.date())
+def get_github_date():
+    us_time = datetime.datetime.fromtimestamp(time.time() - 16 * 3600)
+    # print us_time.date()
+    return str(us_time.date())
 
 
 def has_commit_today():
-    t = get_github_time()
+    date = get_github_date()
     for repo in github3.iter_user_repos(Github.user_name):
-        if t in str(repo.pushed_at):
+        # print repo.pushed_at, repo.name
+        if date in str(repo.pushed_at):
             return True
     return False
 
@@ -37,9 +40,7 @@ def get_fake_repo():
 
 def fake_commit():
     repo = get_fake_repo()
-    # t = get_github_time()
-    import random  # debug
-    t = get_github_time() + "-" + str(random.randrange(1000))  # debug
+    t = get_github_date() + "-" + str(datetime.datetime.now().time())[:5]
 
     path = "log/%s" % t
     msg = "hasnt commit at %s" % t
@@ -51,7 +52,6 @@ def main():
     global gh
     gh = github3.login(Github.user_name, password=Github.user_passwd)
     if not has_commit_today():
-    # if True:  # debug
         fake_commit()
 
 
