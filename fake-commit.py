@@ -8,7 +8,7 @@ import datetime
 gh = None
 
 
-class Github:
+class Config:
     user_name = "<user-name>"
     user_passwd = "<password>"
     fake_repo_name = "fake-commit-log"
@@ -22,7 +22,12 @@ def get_github_date():
 
 def has_commit_today():
     date = get_github_date()
-    for repo in github3.iter_user_repos(Github.user_name):
+    try:
+        repos = github3.iter_user_repos(Config.user_name)
+    except Exception, e:
+        raise e
+
+    for repo in repos:
         # print repo.pushed_at, repo.name
         if date in str(repo.pushed_at):
             return True
@@ -31,28 +36,49 @@ def has_commit_today():
 
 def get_fake_repo():
     global gh
-    repo = gh.repository(Github.user_name, Github.fake_repo_name)
+    try:
+        repo = gh.repository(Config.user_name, Config.fake_repo_name)
+    except Exception, e:
+        raise e
+
     if repo:
         return repo
     else:
-        return gh.create_repo(Github.fake_repo_name)
+        try:
+            new_repo = gh.create_repo(Config.fake_repo_name)
+        except Exception, e:
+            raise e
+        return new_repo
 
 
 def fake_commit():
     repo = get_fake_repo()
-    t = get_github_date() + "-" + str(datetime.datetime.utcnow().time())[:5]
+    if repo is None:
+        print 'Repo Is None'
+    else:
+        print repo
+    timestamp = get_github_date() + "-" + str(datetime.datetime.utcnow().time(
+    ))[:5]
 
-    path = "log/%s" % t
-    msg = "hasnt commit at %s" % t
-    content = t
-    repo.create_file(path, msg, content)
+    path = "log/%s" % timestamp
+    msg = "hasnt commit at %s" % timestamp
+    content = timestamp
+    try:
+        repo.create_file(path, msg, content)
+    except Exception, e:
+        raise e
+    print 'Fake Push is OK'
 
 
 def main():
     global gh
-    gh = github3.login(Github.user_name, password=Github.user_passwd)
+    gh = github3.login(Config.user_name, password=Config.user_passwd)
+    print 'Name : {}'.format(Config.user_name)
     if not has_commit_today():
+        print 'hasnt push today ... '
         fake_commit()
+    else:
+        print 'You has pushed today ...'
 
 
 if __name__ == '__main__':
