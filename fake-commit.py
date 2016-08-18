@@ -4,13 +4,14 @@
 import github3
 import time
 import datetime
+import random
 
 gh = None
 
 
 class Config:
-    user_name = "<user-name>"
-    user_passwd = "<password>"
+    user_name = "<user_name>"
+    user_passwd = "<user_passwd>"
     fake_repo_name = "fake-commit-log"
 
 
@@ -76,7 +77,8 @@ def main():
     print 'Name : {}'.format(Config.user_name)
     if not has_commit_today():
         print 'hasnt push today ... '
-        fake_commit()
+        for x in xrange(random.randint(2, 10)):
+            fake_commit()
     else:
         print 'You has pushed today ...'
 
