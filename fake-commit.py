@@ -15,9 +15,13 @@ class Config:
     fake_repo_name = "fake-commit-log"
 
 
+def debug(msg):
+    print(msg)
+
+
 def get_github_date():
     us_time = datetime.datetime.utcnow()
-    # print us_time
+    # debug(us_time)
     return str(us_time.date())
 
 
@@ -29,7 +33,7 @@ def has_commit_today():
         raise e
 
     for repo in repos:
-        # print repo.pushed_at, repo.name
+        # debug(repo.pushed_at, repo.name)
         if date in str(repo.pushed_at):
             return True
     return False
@@ -55,11 +59,10 @@ def get_fake_repo():
 def fake_commit():
     repo = get_fake_repo()
     if repo is None:
-        print 'Repo Is None'
+        debug('Repo Is None')
     else:
-        print repo
-    timestamp = get_github_date() + "-" + str(datetime.datetime.utcnow().time(
-    ))[:5]
+        debug(repo)
+    timestamp = get_github_date() + "-" + str(datetime.datetime.utcnow().time())[:5]
 
     path = "log/%s" % timestamp
     msg = "hasnt commit at %s" % timestamp
@@ -68,19 +71,19 @@ def fake_commit():
         repo.create_file(path, msg, content)
     except Exception, e:
         raise e
-    print 'Fake Push is OK'
+    debug('Fake Push is OK')
 
 
 def main():
     global gh
     gh = github3.login(Config.user_name, password=Config.user_passwd)
-    print 'Name : {}'.format(Config.user_name)
+    debug('Name : {}'.format(Config.user_name))
     if not has_commit_today():
-        print 'hasnt push today ... '
+        debug('hasnt push today ... ')
         for x in xrange(random.randint(2, 10)):
             fake_commit()
     else:
-        print 'You has pushed today ...'
+        debug('You has pushed today ...')
 
 
 if __name__ == '__main__':
