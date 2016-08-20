@@ -6,18 +6,32 @@ import github3
 import time as stime
 import datetime
 import random
+import os
 
-DEBUG = True
-MAX_RANGE = 10
+DEBUG = False
+MAX_RANGE = 20
 gh = None
 
+# ---------------------------------------------------------
+# Create Config File
+# ---------------------------------------------------------
+CONFIG_FILE = "Config.py"
+CONFIG_DEFAULT = """
+user_name = "<user_name>"
+user_passwd = "<user_passwd>"
+fake_repo_name = "fake-commit-log"
+"""
 
-class Config:
-    user_name = "<user_name>"
-    user_passwd = "<user_passwd>"
-    fake_repo_name = "fake-commit-log"
+def check_config_file():
+    if os.path.exists(CONFIG_FILE) is True:
+        return 
 
+    with open(CONFIG_FILE, "w") as fp:
+        fp.write(CONFIG_DEFAULT)
 
+check_config_file()
+import Config
+# ---------------------------------------------------------
 
 def debug_log(msg):
     print "[Info]", msg
@@ -115,3 +129,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    pass
