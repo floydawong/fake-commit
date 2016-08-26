@@ -13,12 +13,23 @@ MAX_RANGE = 20
 gh = None
 
 # ---------------------------------------------------------
+# Log
+# ---------------------------------------------------------
+def debug_log(msg):
+    print "[Info]", msg
+
+
+def error_log(msg):
+    print "[Error]", msg
+    exit()
+
+# ---------------------------------------------------------
 # Create Config File
 # ---------------------------------------------------------
 CONFIG_FILE = "Config.py"
 CONFIG_DEFAULT = """
-user_name = "<user_name>"
-user_passwd = "<user_passwd>"
+user_name      = "<user_name>"
+user_passwd    = "<user_passwd>"
 fake_repo_name = "fake-commit-log"
 """
 
@@ -28,19 +39,13 @@ def check_config_file():
 
     with open(CONFIG_FILE, "w") as fp:
         fp.write(CONFIG_DEFAULT)
+    debug_log("Created config file.\nModify Config.py and run this script again.")
+    exit()
 
 check_config_file()
 import Config
+
 # ---------------------------------------------------------
-
-def debug_log(msg):
-    print "[Info]", msg
-
-
-def error_log(msg):
-    print "[Error]", msg
-    exit()
-
 def get_github_date():
     us_time = datetime.datetime.utcnow()
     return str(us_time.date())
@@ -129,4 +134,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    pass
